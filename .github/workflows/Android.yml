@@ -22,7 +22,7 @@ jobs:
         run: |
           export GOOS=android
           export GOARCH=arm64
-          export CGO_ENABLED=0
+          export CGO_ENABLED=1
           go build -o deeplx-android-arm64
 
       - name: Upload artifact
