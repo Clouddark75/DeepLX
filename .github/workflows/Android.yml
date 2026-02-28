@@ -1,4 +1,4 @@
-name: Build DeepLX ARM64 (Termux)
+name: Build DeepLX ARM64 (Termux Static)
 
 on:
   workflow_dispatch:
@@ -18,18 +18,18 @@ jobs:
         with:
           go-version: '1.24.2'
 
-      - name: Build Linux ARM64 with CGO
+      - name: Build Linux ARM64 Static
         run: |
-         sudo apt-get update
-         sudo apt-get install -y gcc-aarch64-linux-gnu
-         export CC=aarch64-linux-gnu-gcc
-         export GOOS=linux
-         export GOARCH=arm64
-         export CGO_ENABLED=1
-         go build -o deeplx-linux-arm64
+          GOOS=linux \
+          GOARCH=arm64 \
+          CGO_ENABLED=0 \
+          go build -ldflags="-s -w" -o deeplx
+
+      - name: Verify binary type
+        run: file deeplx
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: deeplx-linux-arm64
-          path: deeplx-linux-arm64
+          name: deeplx-arm64-static
+          path: deeplx
